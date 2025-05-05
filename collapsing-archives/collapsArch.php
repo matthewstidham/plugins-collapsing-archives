@@ -2,12 +2,12 @@
 /*
 Plugin Name: Collapsing Archives
 Plugin URI: http://robfelty.com/plugins/collapsing-archives
-Description: Allows users to expand and collapse archive links like Blogger. <a href='http://wordpress.org/extend/plugins/collapsing-archives/other_notes'>Manual</a> | <a href='http://wordpress.org/extend/plugins/collapsing-archives/faq'>FAQ</a>
+Description: Allows users to expand and collapse archive links like Blogger. <a href='http://wordpress.org/plugins/collapsing-archives/'>Documentation</a>
 Author: Robert Felty
-Version: 3.0.6
+Version: 3.0.7
 Author URI: http://robfelty.com
 
-Copyright 2007-2023 Robert Felty
+Copyright 2007-2025 Robert Felty
 
 This file is part of Collapsing Archives
 
@@ -35,53 +35,10 @@ function collapsArch_load_domain() {
 }
 add_action('init', 'collapsArch_load_domain');
 
-
 /****************/
-if (!is_admin()) {
-  add_action( 'wp_head', array('collapsArch','get_head'));
-} else {
-  // call upgrade function if current version is lower than actual version
-  $dbversion = get_option('collapsArchVersion');
-  if (!$dbversion || $collapsArchVersion != $dbversion)
-    collapsArch::init();
-}
-register_activation_hook(__FILE__, array('collapsArch','init'));
 
 class collapsArch {
-	public static function init() {
-    global $collapsArchVersion;
-    $dbversion = get_option('collapsArchVersion');
-    if ($collapsArchVersion != $dbversion) {
-      update_option( 'collapsArchVersion', $collapsArchVersion);
-    }
-    if (!get_option('collapsArchVersion')) {
-      add_option( 'collapsArchVersion', $collapsArchVersion);
-		}
 
-	}
-
-	public static function get_head() {
-    echo "<style type='text/css'>";
-    echo collapsArch::set_styles();
-    echo "</style>\n";
-	}
-  public static function set_styles() {
-    $widget_options = get_option('widget_collapsarch');
-    include('collapsArchStyles.php');
-    $css = '';
-    $oldStyle=true;
-    foreach ($widget_options as $key=>$value) {
-      $id = "widget-collapsarch-$key-top";
-      if (isset($value['style'])) {
-        $oldStyle=false;
-        $style = $defaultStyles[$value['style']];
-        $css .= str_replace('{ID}', '#' . $id, $style);
-      }
-    }
-    if ($oldStyle)
-      $css=stripslashes(get_option('collapsArchStyle'));
-    return($css);
-  }
   public static function phpArrayToJS($array, $name, $options) {
     /* generates javscript code to create an array from a php array */
 	$js = "try { $name" .
@@ -190,8 +147,8 @@ function collapsArch($args='', $cookies=null, $print=true, $callback=false) {
     $archives .= "<li style='display:none'><script type=\"text/javascript\">\n";
     $archives .= "// <![CDATA[\n";
       $archives .= '/* These variables are part of the Collapsing Archives Plugin
-   * version: 3.0.6
-   * revision: $Id: collapsArch.php 3131141 2024-08-05 15:09:23Z robfelty $
+   * version: 3.0.7
+   * revision: $Id: collapsArch.php 3287469 2025-05-05 06:53:26Z robfelty $
    * Copyright 2008 Robert Felty (robfelty.com)
            */' ."\n";
 
